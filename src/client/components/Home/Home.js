@@ -58,14 +58,14 @@ class Home extends Component {
     const { arr } = this.state;
     return (
       <div>
-        <Typography
-          variant="h3"
+        {/* <Typography
+          variant="h4"
           align="center"
           color="primary"
           className={classes.header}
         >
-          Controller
-        </Typography>
+          Giao diện quản lý tác tử trên các thiết bị
+        </Typography> */}
         <Grid container spacing={24}>
           {arr.map((x, index) => (
             <Grid key={index} item md={4} sm={6} xs={12}>

@@ -28,7 +28,7 @@ const dashboardRoutes = [
   {
     path: '/manager',
     sidebarName: 'Quản lý thiết bị',
-    navbarName: 'Giao diện quản lý thiết bị',
+    navbarName: 'Giao diện quản lý tác tử trên các thiết bị',
     icon: ImportantDevices,
     component: Manager,
   },
@@ -42,7 +42,7 @@ const dashboardRoutes = [
   {
     path: '/service',
     sidebarName: 'Quản lý dịch vụ',
-    navbarName: 'Giao diện quản lý thiết bị',
+    navbarName: 'Giao diện quản lý tác tử trên các thiết bị',
     icon: BubbleChart,
     component: Manager,
   },
@@ -56,7 +56,7 @@ const dashboardRoutes = [
   {
     path: '/services',
     component: Services,
-    navbarName: 'Services',
+    navbarName: 'Phân tích dữ liệu của thiết bị',
   },
   { redirect: true, path: '/', to: '/dashboard', navbarName: 'Redirect' },
 ];

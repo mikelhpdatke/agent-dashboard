@@ -12,6 +12,11 @@ import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import CardFooter from 'components/Card/CardFooter.jsx';
 import { Grid } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
+import CastConnected from '@material-ui/icons/CastConnected';
+import Equalizer from '@material-ui/icons/Equalizer';
+import Fab from '@material-ui/core/Fab';
+import { history } from '_helpers';
 import { verifiedIcon, warningIcon } from './icon/Icon';
 import ConnectedAlertDialogSlide from './Dialogs';
 import { homeActions, servicesActions, dialogsActions } from '../../_actions';
@@ -59,6 +64,9 @@ const styles = theme => ({
     borderRadius: '50%',
     backgroundColor: 'red',
   },
+  extendedIcon: {
+    marginRight: theme.spacing.unit,
+  },
 });
 class SimpleCard extends Component {
   render() {
@@ -74,33 +82,46 @@ class SimpleCard extends Component {
     let statusButton;
     if (!status) {
       button = (
-        <Button
+        <Fab
           onClick={() => {
             console.log('openedddddddddd');
             openDialogs(true, ip);
           }}
-          component={Link}
-          to="#"
-          variant="contained"
+          color="primary"
+          variant="extended"
+          aria-label="connect"
+          className={classes.fab}
         >
+          <CastConnected className={classes.extendedIcon} />
           Kết nối
-        </Button>
+        </Fab>
       );
-      statusButton = <div className={classes.roundErrIcon} />;
+      statusButton = (
+        <Tooltip title="Không hoạt động" placement="right-start">
+          <div className={classes.roundErrIcon} />
+        </Tooltip>
+      );
     } else {
       button = (
-        <Button
+        <Fab
           onClick={() => {
             send({ name: this.props.name, id: this.props.card });
+            history.push('/services');
           }}
-          component={Link}
-          to="/services"
-          variant="contained"
+          color="primary"
+          variant="extended"
+          aria-label="connect"
+          className={classes.fab}
         >
+          <Equalizer className={classes.extendedIcon} />
           Phân tích
-        </Button>
+        </Fab>
       );
-      statusButton = <div className={classes.roundOkIcon} />;
+      statusButton = (
+        <Tooltip title="Đang hoạt động" placement="right-start">
+          <div className={classes.roundOkIcon} />
+        </Tooltip>
+      );
     }
 
     return (
@@ -144,15 +165,6 @@ class SimpleCard extends Component {
               justify="space-around"
               alignItems="center"
             >
-              <Grid item>
-                <Button
-                  color={status ? 'primary' : 'secondary'}
-                  variant="contained"
-                >
-                  {status ? 'Đang chạy' : 'Đã dừng'}
-                </Button>
-              </Grid>
-
               <Grid item>{button}</Grid>
             </Grid>
             <ConnectedAlertDialogSlide />

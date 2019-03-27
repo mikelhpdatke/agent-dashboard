@@ -21,10 +21,11 @@ import { homeActions } from '_actions/index';
 // import { servicesActions } from '../../_actions';
 import { PostApi, ip } from '_helpers/Utils';
 import { Typography, Grid, Divider } from '@material-ui/core';
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
+import Card from 'components/Card/Card.jsx';
+import CardHeader from 'components/Card/CardHeader.jsx';
+import CardBody from 'components/Card/CardBody.jsx';
+import CardFooter from 'components/Card/CardFooter.jsx';
+import { history } from '_helpers';
 
 const socket = openSocket(ip.server);
 function subscribeToTimer(cb) {
@@ -33,31 +34,33 @@ function subscribeToTimer(cb) {
 
 const styles = theme => ({
   cardCategoryWhite: {
-    "&,& a,& a:hover,& a:focus": {
-      color: "rgba(255,255,255,.62)",
-      margin: "0",
-      fontSize: "14px",
-      marginTop: "0",
-      marginBottom: "0"
+    textTransform: 'none',
+    '&,& a,& a:hover,& a:focus': {
+      color: 'rgba(255,255,255,.62)',
+      margin: '0',
+      fontSize: '14px',
+      marginTop: '0',
+      marginBottom: '0',
     },
-    "& a,& a:hover,& a:focus": {
-      color: "#FFFFFF"
-    }
+    '& a,& a:hover,& a:focus': {
+      color: '#FFFFFF',
+    },
   },
   cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
+    textTransform: 'none',
+    color: '#FFFFFF',
+    marginTop: '0px',
+    minHeight: 'auto',
+    fontWeight: '300',
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none",
-    "& small": {
-      color: "#777",
-      fontSize: "65%",
-      fontWeight: "400",
-      lineHeight: "1"
-    }
+    marginBottom: '3px',
+    textDecoration: 'none',
+    '& small': {
+      color: '#777',
+      fontSize: '65%',
+      fontWeight: '400',
+      lineHeight: '1',
+    },
   },
   root: {
     width: '100%',
@@ -72,7 +75,7 @@ const styles = theme => ({
     backgroundColor: 'rgba(45, 45, 45, 0.1)',
     padding: '2px',
     color: 'red',
-    fontSize: '40px',
+    fontSize: '20px',
     marginTop: '3px',
   },
   contrainer: {
@@ -93,9 +96,9 @@ const styles = theme => ({
 });
 
 const options = [
-  'Get PID and MD5 data',
-  'Get network data',
-  'Get syscall data',
+  'Lấy dữ liệu PID and MD5',
+  'Lấy dữ liệu mạng',
+  'Lấy dữ liệu lời gọi hệ thống',
 ];
 
 class Services extends Component {
@@ -166,6 +169,12 @@ class Services extends Component {
     let sendState;
     const { sendding, pid, selectedIndex, openSnackBar } = this.state;
     const { message } = this.props;
+    console.log(message);
+    // Neu khong nhan duoc thong tin agent?
+    if (!message) {
+      history.push('/manager');
+      return <div />;
+    }
     if (sendding === true) {
       sendState = (
         <div className="col-1">
@@ -203,124 +212,123 @@ class Services extends Component {
     }
     // console.log(this.props.title); this.props.message.card
     return (
-      <React.Fragment>
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-          open={openSnackBar}
-          autoHideDuration={5000}
-          onClose={this.handleCloseSnackBar}
-          ContentProps={{
-            'aria-describedby': 'message-id',
-          }}
-          message={<span id="message-id">Successfully received</span>}
-          action={[
-            <Button
-              key="undo"
-              color="secondary"
-              size="small"
-              onClick={this.handleCloseSnackBar}
-            >
-              UNDO
-            </Button>,
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={classes.close}
-              onClick={this.handleCloseSnackBar}
-            >
-              <CloseIcon />
-            </IconButton>,
-          ]}
-        />
-        <Card>
-          <CardHeader color='primary'>
-            <Typography variant='h3' className={classes.cardTitleWhite}>
-              {`${message.name}`}
-            </Typography>
-          </CardHeader>
-          <CardBody>
-            <Grid
-              container
-              spacing={24}
-            >
-              <Grid
-                item
-                md={1}
-                xs={0}
-              ></Grid>
-              <Grid
-                item
-                md={selectedIndex === 2 ? 5 : 10}
-                xs={12}
+      <Grid container direction="row" justify="center" alignItems="center">
+        <Grid item xs={12} md={8}>
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            open={openSnackBar}
+            autoHideDuration={5000}
+            onClose={this.handleCloseSnackBar}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">Successfully received</span>}
+            action={[
+              <Button
+                key="undo"
+                color="secondary"
+                size="small"
+                onClick={this.handleCloseSnackBar}
               >
-                <List component="nav">
-                  <ListItem
-                    button
-                    aria-haspopup="true"
-                    aria-controls="lock-menu"
-                    aria-label="Function"
-                    onClick={this.handleClickListItem}
-                  >
-                    <ListItemText
-                      primary="Function"
-                      secondary={options[selectedIndex]}
-                    />
-                  </ListItem>
-                </List>
-                <Menu
-                  id="lock-menu"
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={this.handleClose}
-                >
-                  {options.map((option, index) => (
-                    <MenuItem
-                      key={option}
-                      selected={index === selectedIndex}
-                      onClick={event => this.handleMenuItemClick(event, index)}
+                UNDO
+              </Button>,
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                className={classes.close}
+                onClick={this.handleCloseSnackBar}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
+          <Card>
+            <CardHeader color="primary">
+              <Typography variant="h6" className={classes.cardTitleWhite}>
+                {`${message.name}`}
+              </Typography>
+            </CardHeader>
+            <CardBody>
+              <Grid container spacing={24}>
+                <Grid item md={1} xs={1} />
+                <Grid item md={selectedIndex === 2 ? 5 : 10} xs={12}>
+                  <List component="nav">
+                    <ListItem
+                      button
+                      aria-haspopup="true"
+                      aria-controls="lock-menu"
+                      aria-label="Function"
+                      onClick={this.handleClickListItem}
                     >
-                      {option}
-                    </MenuItem>
-                  ))}
-                </Menu>
+                      <ListItemText
+                        primary="Chức năng:"
+                        secondary={options[selectedIndex]}
+                      />
+                    </ListItem>
+                  </List>
+                  <Menu
+                    id="lock-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={this.handleClose}
+                  >
+                    {options.map((option, index) => (
+                      <MenuItem
+                        key={option}
+                        selected={index === selectedIndex}
+                        onClick={event =>
+                          this.handleMenuItemClick(event, index)
+                        }
+                      >
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Grid>
+                <Grid
+                  item
+                  md={selectedIndex === 2 ? 5 : 0}
+                  xs={selectedIndex === 2 ? 12 : 0}
+                >
+                  {selectedIndex === 2 ? (
+                    <TextField
+                      id="outlined-uncontrolled"
+                      label="Mã PID của tiến trình"
+                      name="pid"
+                      placeholder="Nhập pid của tiến trình cần lấy"
+                      value={pid}
+                      className={classes.textField}
+                      onChange={this.handleChange}
+                      margin="normal"
+                      InputProps={{
+                        shrink: true,
+                      }}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  ) : null}
+                </Grid>
+                <Grid item md={1} xs={0} />
               </Grid>
+              <Divider />
+            </CardBody>
+            <CardFooter>
               <Grid
-                item
-                md={selectedIndex === 2 ? 5 : 0}
-                xs={selectedIndex === 2 ? 12 : 0}
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
               >
-                {selectedIndex === 2 ? (
-                  <TextField
-                    id="outlined-uncontrolled"
-                    label="PID"
-                    name="pid"
-                    value={pid}
-                    className={classes.textField}
-                    onChange={this.handleChange}
-                    margin="normal"
-                    variant="outlined"
-                    fullWidth
-                  />
-                ) : null}
+                <Grid item>{sendState}</Grid>
               </Grid>
-              <Grid
-                item
-                md={1}
-                xs={0}
-              >
-              </Grid>
-            </Grid>
-            <Divider></Divider>
-          </CardBody>
-          <CardFooter>
-            {sendState}
-          </CardFooter>
-        </Card>
-      </React.Fragment>
+            </CardFooter>
+          </Card>
+        </Grid>
+      </Grid>
     );
   }
 }
