@@ -1,0 +1,27 @@
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties"
+  ],
+  "env": {
+    "server": {
+        "plugins": [
+            [
+                "css-modules-transform", {
+                    "generateScopedName": "[hash:8]",
+                    "extensions": [".css"]
+                }
+            ],
+            [
+                "transform-assets", {
+                    "extensions": ["svg", "jpg"],
+                    "name": "[name].[ext]?[sha512:hash:base64:7]",
+                }
+            ]
+        ]
+    }
+    }
+}

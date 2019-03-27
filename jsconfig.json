@@ -1,0 +1,43 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "commonjs",
+      "allowSyntheticDefaultImports": true,
+      "baseUrl": "./",
+      "paths": {
+        "components/*": [
+          "src/client/components/*"
+        ],
+        "views/*": [
+          "src/client/views/*"
+        ],
+        "_actions/*": [
+            "src/client/_actions/*"
+        ],
+        "_constants/*": [
+            "src/client/_constants/*"
+        ],
+        "_helpers/*": [
+            "src/client/_helpers/*"
+        ],
+        "_reducers/*": [
+            "src/client/_reducers/*"
+        ],
+        "_services/*": [
+            "src/client/_services/*"
+        ],
+        "assets/*": [
+            "src/client/assets/*"
+        ],
+        "layouts/*": [
+            "src/client/layouts/*"
+        ],
+        "media/*": [
+            "src/client/media/*"
+        ],
+        "routes/*": [
+            "src/client/routes/*"
+        ],
+      }
+    }
+  }
