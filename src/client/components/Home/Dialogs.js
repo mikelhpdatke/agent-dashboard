@@ -24,7 +24,7 @@ class AlertDialogSlide extends React.Component {
 
   render() {
     const { dialogs, closeDialogs, toastManager } = this.props;
-    console.log(`${dialogs.message}ffffffffffffffff`);
+    console.log(dialogs);
     return (
       <div>
         <Dialog
@@ -37,10 +37,10 @@ class AlertDialogSlide extends React.Component {
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle id="alert-dialog-slide-title">WARNING</DialogTitle>
+          <DialogTitle id="alert-dialog-slide-title">CHÚ Ý</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              Are you sure to install agent to this device?
+              Bạn có chắc chắn muốn cài tác tử lên thiết bị này?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -50,40 +50,42 @@ class AlertDialogSlide extends React.Component {
               }}
               color="primary"
             >
-              Disagree
+              Hủy bỏ
             </Button>
             <Button
               onClick={() => {
                 closeDialogs(false, dialogs.message.ip);
-                PostApi('/api/installAgent', { ip: dialogs.message.ip })
+                PostApi('/api/users/installAgent', {
+                  ipClient: dialogs.message.ip,
+                })
                   .then(res => {
                     // console.log('in postapi resssss');
                     // console.log(`${res.status}in postapi resssss`);
-                    if (res.status === 'err') {
-                      console.log('wtf ress???');
-                      return Promise.reject(new Error('err'));
+                    if (!res.status) {
+                      // console.log('wtf ress???');
+                      return Promise.reject(new Error(res.data));
                     }
-                    console.log('show toaskkkkkkkk');
-                    toastManager.add('Install agent successfully', {
-                      appearance: 'success',
-                      autoDismissTimeout: '5000',
-                      autoDismiss: 'true',
-                    });
-                  })
-                  .catch(() => {
+                    // console.log('show toaskkkkkkkk');
                     toastManager.add(
-                      'Somethings went wrong, please try again!',
+                      `Cài đặt thành công lên thiết bị: ${dialogs.message.ip}`,
                       {
-                        appearance: 'error',
+                        appearance: 'success',
                         autoDismissTimeout: '5000',
                         autoDismiss: 'true',
                       }
                     );
+                  })
+                  .catch(() => {
+                    toastManager.add('Cài đặt bị lỗi, hãy thử lại sau!', {
+                      appearance: 'error',
+                      autoDismissTimeout: '5000',
+                      autoDismiss: 'true',
+                    });
                   });
               }}
               color="primary"
             >
-              Agree
+              Đồng ý
             </Button>
           </DialogActions>
         </Dialog>

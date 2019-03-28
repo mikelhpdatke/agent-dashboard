@@ -6,7 +6,7 @@ export async function PostApi(url, json) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      ...authHeader(),
+      // ...authHeader(),
     },
     body: JSON.stringify(json),
   });

@@ -6,8 +6,30 @@ const userService = require('./user.service');
 // routes
 router.post('/authenticate', authenticate);
 router.get('/', getAll);
+router.post('/getClients', getClients);
+router.post('/installAgent', installAgent);
 
 module.exports = router;
+
+function getClients(req, res, next) {
+  userService
+    .getClients()
+    .then(result => {
+      res.json({ status: true, data: result });
+    })
+    .catch(err => next(err));
+}
+
+function installAgent(req, res, next) {
+  const { ipClient } = req.body;
+  userService
+    .installAgent({ ipClient })
+    .then(result => {
+      console.log(result);
+      res.json({ status: true, data: result });
+    })
+    .catch(err => next(err));
+}
 
 function authenticate(req, res, next) {
   // console.log('helsasdl');

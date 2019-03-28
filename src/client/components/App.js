@@ -6,7 +6,12 @@ import { Switch, Route, Router } from 'react-router-dom';
 // import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import indexRoutes from "routes/index.jsx";
+import indexRoutes from 'routes/index.jsx';
+import {
+  ToastConsumer,
+  ToastProvider,
+  withToastManager,
+} from 'react-toast-notifications';
 import Home from './Home/Home';
 // import PermanentDrawerLeft from './AdminManagement/ManageUser';
 // import Setting from './SettingManagement/Setting';
@@ -32,7 +37,7 @@ class App extends React.Component {
     const { alert } = this.props;
 
     return (
-      <div>
+      <ToastProvider placement="bottom-right">
         <div>
           <div>
             {alert.message && (
@@ -54,7 +59,7 @@ class App extends React.Component {
             </Router>
           </div>
         </div>
-      </div>
+      </ToastProvider>
     );
   }
 }

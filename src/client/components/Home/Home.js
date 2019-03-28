@@ -16,37 +16,39 @@ const styles = {
 };
 
 class Home extends Component {
+  getClients = () => {
+    PostApi('/api/users/getClients', {}).then(res => {
+      // console.log('??');
+      // console.log(res);
+      if (res && res.status && res.data) this.setState({ arr: res.data });
+    });
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       arr: [
-        {
-          ip: '192.168.0.107',
-          port: '22',
-          address: 'ffff:192.168.0.107:22',
-          active: true,
-        },
-        {
-          ip: '192.168.0.1',
-          port: '80',
-          address: 'ffff:192.168.0.1:80',
-          active: false,
-        },
+        // {
+        //   ip: '192.168.0.107',
+        //   port: '22',
+        //   address: 'ffff:192.168.0.107:22',
+        //   active: true,
+        // },
+        // {
+        //   ip: '192.168.0.1',
+        //   port: '80',
+        //   address: 'ffff:192.168.0.1:80',
+        //   active: false,
+        // },
       ],
     };
     this.myInterval = setInterval(() => {
-      PostApi('/api/getClients', {}).then(res => {
-        console.log(res);
-        if (res && res.arr) this.setState({ arr: res.arr });
-      });
+      this.getClients();
     }, 10000);
   }
 
   componentDidMount() {
-    PostApi('/api/getClients', {}).then(res => {
-      console.log(res);
-      if (res && res.arr) this.setState({ arr: res.arr });
-    });
+    this.getClients();
   }
 
   componentWillUnmount() {

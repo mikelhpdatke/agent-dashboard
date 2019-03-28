@@ -21,7 +21,7 @@ const dashboardRoutes = [
   {
     path: '/dashboard',
     sidebarName: 'Dashboard',
-    navbarName: 'Material Dashboard',
+    navbarName: 'Hệ thống quản lý tác tử trên các thiết bị IoT',
     icon: Dashboard,
     component: DashboardPage,
   },

@@ -1,42 +1,69 @@
+# -*- coding: utf-8 -*-
 import telnetlib
 import sys
+reload(sys)
+# sys.set
 import time
-import MySQLdb
+import pymongo
+import socket
+
+# call `python InstallAgent.py ip_client`  de cai dat agent vao route co ip_client
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
 
 def getDeviceInfo(HOST):
-    HOST = HOST[HOST.rfind(':') + 1:]
-    db = MySQLdb.connect("localhost", "root", "root", "AGENT")
-    cursor = db.cursor()
-    sql = "SELECT * FROM device_auth WHERE address_ip LIKE '" + HOST + "'"
-    cursor.execute(sql)
-    data = cursor.fetchone()
-    print data
-    return data[1], data[2], data[3], data[4]
-    db.close()
+    # HOST = HOST[HOST.rfind(':') + 1:]
+    client = pymongo.MongoClient("localhost", 27017)
+    db = client.AGENT
+    data = db.device_auth.find_one({"ip_address": HOST})
+    print(data)
+    return data["ip_address"], data["port"], data["user"], data["pass"], data["arch"]
 
-def install(HOST, PORT, USER, PASSWORD):
+def install(HOST, PORT, USER, PASSWORD, ARCH):
     print(HOST)
     print(PORT)
+    # print(USER)
+    # print(PASSWORD)
+    localIP = get_ip()
     telnet = telnetlib.Telnet(HOST)
     telnet.read_until("ogin: ")
-    telnet.write(USER + "\n")
+    telnet.write("admin\n")
     if PASSWORD != "":
         telnet.read_until("assword: ")
-        telnet.write(PASSWORD + "\n")
+        telnet.write("admin\n")
     telnet.write("sh\n")
     telnet.write("cd /tmp\n")
-    if HOST == '192.168.1.2':
-        telnet.write('wget http://192.168.1.3/ARM/agent_arm.sh\n')
+    if str(ARCH).lower() == "arm":
+        telnet.write('wget http://' + localIP + '/ARM/agent_arm.sh\n')
         telnet.write('chmod +x agent_arm.sh\n')
         telnet.write('sh agent_arm.sh\n')
     else:
-        if HOST == '192.168.1.1':
-            telnet.write('wget http://192.168.1.3/MIPS32/agent_MIPS32.sh\n')
+        if str(ARCH).lower() == "mips32":
+            telnet.write('wget http://' + localIP + '/MIPS32/agent_MIPS32.sh\n')
             telnet.write('chmod +x agent_MIPS32.sh\n')
             telnet.write('sh agent_MIPS32.sh\n')
+        else:
+            if str(ARCH).lower() == "mips":
+                telnet.write('wget http://' + localIP + '/MIPS/agent_MIPS.sh\n')
+                telnet.write('chmod +x agent_MIPS.sh\n')
+                telnet.write('sh agent_MIPS.sh ' + localIP + "\n")
+    # print(telnet.read_all().decode('ascii'))
     telnet.write("exit\n")
-    print telnet.read_all()
+    telnet.close()
+    # 
+    print('end..')
 
 if __name__ == '__main__':
-    HOST, PORT, USER, PASSWORD = getDeviceInfo(sys.argv[1])
-    install(HOST, PORT, USER, PASSWORD)
+    HOST, PORT, USER, PASSWORD, ARCH = getDeviceInfo(sys.argv[1])
+    install(HOST, PORT, USER, PASSWORD, ARCH)
