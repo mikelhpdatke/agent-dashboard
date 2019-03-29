@@ -13,7 +13,7 @@ import LocalOffer from '@material-ui/icons/LocalOffer';
 import Update from '@material-ui/icons/Update';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import AccessTime from '@material-ui/icons/AccessTime';
-import Accessibility from '@material-ui/icons/Accessibility';
+import Devices from '@material-ui/icons/Devices';
 import BugReport from '@material-ui/icons/BugReport';
 import Code from '@material-ui/icons/Code';
 import Cloud from '@material-ui/icons/Cloud';
@@ -66,7 +66,7 @@ class Dashboard extends React.Component {
                 </CardIcon>
                 <p className={classes.cardCategory}>Bộ nhớ</p>
                 <h3 className={classes.cardTitle}>
-                  4/50 <small>GB</small>
+                  4/500 <small>GB</small>
                 </h3>
               </CardHeader>
               <CardFooter stats>
@@ -112,10 +112,10 @@ class Dashboard extends React.Component {
             <Card>
               <CardHeader color="info" stats icon>
                 <CardIcon color="info">
-                  <Accessibility />
+                  <Devices />
                 </CardIcon>
-                <p className={classes.cardCategory}>Số người dùng</p>
-                <h3 className={classes.cardTitle}>+245</h3>
+                <p className={classes.cardCategory}>Số lượng thiết bị</p>
+                <h3 className={classes.cardTitle}>29</h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
@@ -133,18 +133,18 @@ class Dashboard extends React.Component {
                 <ChartistGraph
                   className="ct-chart"
                   data={dailySalesChart.data}
-                  type="Line"
+                  type="Bar"
                   options={dailySalesChart.options}
                   listener={dailySalesChart.animation}
                 />
               </CardHeader>
               <CardBody>
-                <h4 className={classes.cardTitle}>Lỗ hổng hằng ngày</h4>
+                <h4 className={classes.cardTitle}>Các hình thức tấn công</h4>
                 <p className={classes.cardCategory}>
-                  <span className={classes.successText}>
+                  {/* <span className={classes.successText}>
                     <ArrowUpward className={classes.upArrowCardCategory} /> Tăng
                     37% hôm nay
-                  </span>{' '}
+                  </span>{' '} */}
                 </p>
               </CardBody>
               <CardFooter chart>
@@ -247,20 +247,22 @@ class Dashboard extends React.Component {
           <GridItem xs={12} sm={12} md={6}>
             <Card>
               <CardHeader color="warning">
-                <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
+                <h4 className={classes.cardTitleWhite}>
+                  Danh sách kỹ thuật viên
+                </h4>
                 <p className={classes.cardCategoryWhite}>
-                  New employees on 15th September, 2016
+                  Cập nhật 2 ngày trước
                 </p>
               </CardHeader>
               <CardBody>
                 <Table
                   tableHeaderColor="warning"
-                  tableHead={['ID', 'Name', 'Salary', 'Country']}
+                  tableHead={['ID', 'Tên', 'Chức vụ', 'Số điện thoại']}
                   tableData={[
-                    ['1', 'Dakota Rice', '$36,738', 'Niger'],
-                    ['2', 'Minerva Hooper', '$23,789', 'Curaçao'],
-                    ['3', 'Sage Rodriguez', '$56,142', 'Netherlands'],
-                    ['4', 'Philip Chaney', '$38,735', 'Korea, South'],
+                    ['1', 'Ngô Quốc Dũng', 'Trưởng ban', '0423234123'],
+                    ['2', 'Đạt Lương Đức Tuấn', 'Phó ban', '0337348333'],
+                    ['3', 'Phạm Văn Huấn', 'Kỹ thuật viên', '0993265132'],
+                    ['4', 'Đỗ Trung Anh', 'Kỹ thuật viên', '0865323656'],
                   ]}
                 />
               </CardBody>

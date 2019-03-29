@@ -50,6 +50,7 @@ const sidebarStyle = theme => ({
     position: 'relative',
     width: '100%',
     height: '100px',
+    marginTop: '20px',
     marginBottom: '10px',
     zIndex: '4',
     '&:after': {

@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withToastManager } from 'react-toast-notifications';
 import { PostApi } from '_helpers/Utils';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { dialogsActions } from '../../_actions';
 
 function Transition(props) {
@@ -18,12 +19,84 @@ function Transition(props) {
 }
 
 class AlertDialogSlide extends React.Component {
+  state = {
+    loading: false,
+  };
+
   toastId = null;
 
   customToastId = 'xxx-yyy';
 
   render() {
+    let footerAction;
     const { dialogs, closeDialogs, toastManager } = this.props;
+
+    if (this.state.loading)
+      footerAction = (
+        <DialogContent>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <CircularProgress disableShrink />
+          </div>
+        </DialogContent>
+      );
+    else
+      footerAction = (
+        <DialogActions>
+          <Button
+            onClick={() => {
+              closeDialogs(false, dialogs.message.ip);
+            }}
+            color="primary"
+          >
+            Hủy bỏ
+          </Button>
+          <Button
+            onClick={() => {
+              this.setState({ loading: true });
+              PostApi('/api/users/installAgent', {
+                ipClient: dialogs.message.ip,
+              })
+                .then(res => {
+                  // console.log('in postapi resssss');
+                  // console.log(`${res.status}in postapi resssss`);
+                  if (!res.status) {
+                    // console.log('wtf ress???');
+                    return Promise.reject(new Error(res.data));
+                  }
+                  // console.log('show toaskkkkkkkk');
+                  toastManager.add(
+                    `Cài đặt thành công lên thiết bị: ${dialogs.message.ip}`,
+                    {
+                      appearance: 'success',
+                      autoDismissTimeout: '5000',
+                      autoDismiss: 'true',
+                    }
+                  );
+                })
+                .catch(() => {
+                  toastManager.add('Cài đặt bị lỗi, hãy thử lại sau!', {
+                    appearance: 'error',
+                    autoDismissTimeout: '5000',
+                    autoDismiss: 'true',
+                  });
+                })
+                .then(ret => {
+                  this.setState({ loading: false });
+                  closeDialogs(false, dialogs.message.ip);
+                });
+            }}
+            color="primary"
+          >
+            Đồng ý
+          </Button>
+        </DialogActions>
+      );
+
     console.log(dialogs);
     return (
       <div>
@@ -43,51 +116,7 @@ class AlertDialogSlide extends React.Component {
               Bạn có chắc chắn muốn cài tác tử lên thiết bị này?
             </DialogContentText>
           </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => {
-                closeDialogs(false, dialogs.message.ip);
-              }}
-              color="primary"
-            >
-              Hủy bỏ
-            </Button>
-            <Button
-              onClick={() => {
-                closeDialogs(false, dialogs.message.ip);
-                PostApi('/api/users/installAgent', {
-                  ipClient: dialogs.message.ip,
-                })
-                  .then(res => {
-                    // console.log('in postapi resssss');
-                    // console.log(`${res.status}in postapi resssss`);
-                    if (!res.status) {
-                      // console.log('wtf ress???');
-                      return Promise.reject(new Error(res.data));
-                    }
-                    // console.log('show toaskkkkkkkk');
-                    toastManager.add(
-                      `Cài đặt thành công lên thiết bị: ${dialogs.message.ip}`,
-                      {
-                        appearance: 'success',
-                        autoDismissTimeout: '5000',
-                        autoDismiss: 'true',
-                      }
-                    );
-                  })
-                  .catch(() => {
-                    toastManager.add('Cài đặt bị lỗi, hãy thử lại sau!', {
-                      appearance: 'error',
-                      autoDismissTimeout: '5000',
-                      autoDismiss: 'true',
-                    });
-                  });
-              }}
-              color="primary"
-            >
-              Đồng ý
-            </Button>
-          </DialogActions>
+          {footerAction}
         </Dialog>
       </div>
     );

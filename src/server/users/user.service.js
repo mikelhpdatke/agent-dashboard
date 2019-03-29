@@ -33,7 +33,8 @@ async function getClients() {
 }
 
 async function installAgent({ ipClient }) {
-  console.log(__dirname);
+  // console.log(__dirname);
+  // console.log(ipClient);
   const filePath = path.resolve(__dirname, '../InstallAgent.py');
   return new Promise((resolve, reject) => {
     exec(`python2 ${filePath} ${ipClient}`, (err, stdout, stderr) => {

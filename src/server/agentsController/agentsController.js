@@ -2,9 +2,9 @@ const net = require('net');
 const utils = require('../Utils/utils');
 
 let clients = [];
-async function getListOfAgents() {
-  clients = await utils.getListOfClients();
-}
+// async function getListOfAgents() {
+//   clients = await utils.getListOfClients();
+// }
 
 getListOfAgents();
 
@@ -20,8 +20,10 @@ net
       active: true,
       currentTask: null,
     };
-
+    console.log('??');
+    console.log(newClient.socket.name);
     socket.on('data', data => {
+      console.log('in recive data..');
       const task = utils.getTask(clients, socket.name);
       listClientForUser = io.sockets.clients();
       currentClient = listClientForUser;

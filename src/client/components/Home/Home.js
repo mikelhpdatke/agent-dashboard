@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 // import Button from '@material-ui/core/Button';
 import { PostApi } from '_helpers/Utils';
 import { Typography, Grid } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import ConnectedCard from './Card';
 
 const styles = {
@@ -17,16 +18,39 @@ const styles = {
 
 class Home extends Component {
   getClients = () => {
-    PostApi('/api/users/getClients', {}).then(res => {
-      // console.log('??');
-      // console.log(res);
-      if (res && res.status && res.data) this.setState({ arr: res.data });
+    this.setState({
+      loading: true,
     });
+    PostApi('/api/users/getClients', {})
+      .then(res => {
+        // console.log('??');
+        // console.log(res);
+        if (res && res.status && res.data) this.setState({ arr: res.data });
+      })
+      .then(ret => {
+        this.setState({ loading: false });
+      });
+  };
+
+  getCurrentClients = () => {
+    this.setState({
+      loading: true,
+    });
+    PostApi('/api/users/getCurrentClients', {})
+      .then(res => {
+        // console.log('??');
+        // console.log(res);
+        if (res) this.setState({ arr: res });
+      })
+      .then(ret => {
+        this.setState({ loading: false });
+      });
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       arr: [
         // {
         //   ip: '192.168.0.107',
@@ -43,7 +67,7 @@ class Home extends Component {
       ],
     };
     this.myInterval = setInterval(() => {
-      this.getClients();
+      this.getCurrentClients();
     }, 10000);
   }
 
@@ -57,7 +81,18 @@ class Home extends Component {
 
   render() {
     const { classes } = this.props;
-    const { arr } = this.state;
+    const { arr, loading } = this.state;
+    if (loading)
+      return (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <CircularProgress disableShrink />
+        </div>
+      );
     return (
       <div>
         {/* <Typography
