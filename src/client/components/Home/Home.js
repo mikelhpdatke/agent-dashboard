@@ -66,17 +66,17 @@ class Home extends Component {
         // },
       ],
     };
-    this.myInterval = setInterval(() => {
-      this.getCurrentClients();
-    }, 10000);
+    // this.myInterval = setInterval(() => {
+    //   this.getCurrentClients();
+    // }, 10000);
   }
 
   componentDidMount() {
-    this.getClients();
+    // this.getClients();
   }
 
   componentWillUnmount() {
-    clearInterval(this.myInterval);
+    // clearInterval(this.myInterval);
   }
 
   render() {
