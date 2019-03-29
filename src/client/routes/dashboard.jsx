@@ -15,6 +15,7 @@ import Typography from 'views/Typography/Typography.jsx';
 import Icons from 'views/Icons/Icons.jsx';
 import Services from 'components/Home/Services.js';
 import Manager from 'views/Manager/Manager.jsx';
+import Logs from 'views/Logs/Logs.jsx';
 import { services } from '../_reducers/services.reducer';
 
 const dashboardRoutes = [
@@ -37,7 +38,7 @@ const dashboardRoutes = [
     sidebarName: 'Quản lý Log',
     navbarName: 'Giao diện quản lý thiết bị',
     icon: Assignment,
-    component: Manager,
+    component: Logs,
   },
   {
     path: '/service',
